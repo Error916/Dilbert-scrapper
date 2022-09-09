@@ -16,7 +16,6 @@ done
 
 printf 'Downloading comic...\n' >&2
 
-comic_url="$(curl -sL "$page_url" | grep -iIohE 'https?://assets[^[:space:]]+[^,"]' | tail -1)"
 curl -sL "$(curl -sL "$page_url" | grep -iIohE 'https?://assets[^[:space:]]+[^,"]' | tail -1)" -o "$dest_img"
 
 $viewer "$dest_img"
