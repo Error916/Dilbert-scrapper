@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+viewer=sxiv
+dest_img=/tmp/dilbert_image.gif
+
+# when random is not mention it defaults to latest
+page_url="https://dilbert.com/strip/$(date +%Y-%m-%d)"
+
+while getopts 'hv:' opt; do
+	case $opt in
+		h)  	printf "Usage: dilbert [OPTION]\ndefault: fetch last comic\n    -h show this message\n    -v select a different image viewer\n"; exit;
+			;;
+		v)	viewer=${OPTARG}
+			;;
+	esac
+done
+
+printf 'Downloading comic...\n' >&2
+
+comic_url="$(curl -sL "$page_url" | grep -iIohE 'https?://assets[^[:space:]]+[^,"]' | tail -1)"
+curl -sL "$(curl -sL "$page_url" | grep -iIohE 'https?://assets[^[:space:]]+[^,"]' | tail -1)" -o "$dest_img"
+
+$viewer "$dest_img"
+rm -v "$dest_img"
